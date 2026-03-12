@@ -1,0 +1,14 @@
+{
+    "builtin": "False",
+    "default_enabled": "True",
+    "type": "extension",
+    "rocket_mode_compatible": "True",
+    "name": "CAP_Tools",
+    "description": "Outils BIM CAP — Automatisation de la production Revit.",
+    "author": "CAP BIM",
+    "author_profile": "",
+    "url": "",
+    "website": "",
+    "image": "",
+    "dependencies": []
+}

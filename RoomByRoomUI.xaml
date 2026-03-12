@@ -1,0 +1,569 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Room by Room — Créateur de Plans"
+        Height="720" Width="960"
+        MinHeight="650" MinWidth="900"
+        WindowStartupLocation="CenterScreen"
+        Background="#FF1E1E2E"
+        ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <!-- ========== COULEURS ========== -->
+        <Color x:Key="BgDark">#1E1E2E</Color>
+        <Color x:Key="BgCard">#2A2A3C</Color>
+        <Color x:Key="BgInput">#363649</Color>
+        <Color x:Key="AccentBlue">#7C8FFF</Color>
+        <Color x:Key="AccentGreen">#6BCB77</Color>
+        <Color x:Key="AccentOrange">#FFA556</Color>
+        <Color x:Key="TextPrimary">#EEEEFF</Color>
+        <Color x:Key="TextSecondary">#9999BB</Color>
+        <Color x:Key="BorderColor">#44445A</Color>
+
+        <SolidColorBrush x:Key="BgDarkBrush" Color="{StaticResource BgDark}"/>
+        <SolidColorBrush x:Key="BgCardBrush" Color="{StaticResource BgCard}"/>
+        <SolidColorBrush x:Key="BgInputBrush" Color="{StaticResource BgInput}"/>
+        <SolidColorBrush x:Key="AccentBlueBrush" Color="{StaticResource AccentBlue}"/>
+        <SolidColorBrush x:Key="AccentGreenBrush" Color="{StaticResource AccentGreen}"/>
+        <SolidColorBrush x:Key="AccentOrangeBrush" Color="{StaticResource AccentOrange}"/>
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondary}"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
+
+        <!-- ========== STYLE BOUTON PRINCIPAL ========== -->
+        <Style x:Key="BtnPrimary" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentBlueBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ========== STYLE BOUTON SECONDAIRE ========== -->
+        <Style x:Key="BtnSecondary" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource BgInputBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#44445A"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ========== STYLE BOUTON ACTION (vert) ========== -->
+        <Style x:Key="BtnAction" TargetType="Button" BasedOn="{StaticResource BtnPrimary}">
+            <Setter Property="Background" Value="{StaticResource AccentGreenBrush}"/>
+        </Style>
+
+        <!-- ========== STYLE CHECKBOX ========== -->
+        <Style x:Key="ModernCheckBox" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,3"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- ========== STYLE COMBOBOX ========== -->
+        <Style x:Key="ModernCombo" TargetType="ComboBox">
+            <Setter Property="Background" Value="{StaticResource BgInputBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- ========== STYLE LABEL SECTION ========== -->
+        <Style x:Key="SectionLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource AccentBlueBrush}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <!-- ========== STYLE STEP INDICATOR ========== -->
+        <Style x:Key="StepInactive" TargetType="Border">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="14,10"/>
+            <Setter Property="Margin" Value="0,2"/>
+        </Style>
+
+        <Style x:Key="StepActive" TargetType="Border">
+            <Setter Property="Background" Value="#333350"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="14,10"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AccentBlueBrush}"/>
+            <Setter Property="BorderThickness" Value="0,0,3,0"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ========================================= -->
+        <!-- SIDEBAR — Navigation des étapes           -->
+        <!-- ========================================= -->
+        <Border Grid.Column="0" Background="#181825" Padding="16,20">
+            <DockPanel>
+                <!-- Logo / Titre -->
+                <StackPanel DockPanel.Dock="Top" Margin="0,0,0,24">
+                    <TextBlock Text="&#x1F3E0; Room by Room"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               FontSize="17" FontWeight="Bold"/>
+                    <TextBlock Text="Créateur de plans"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               FontSize="11" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- Compteur rooms -->
+                <Border DockPanel.Dock="Bottom" Background="#2A2A3C"
+                        CornerRadius="8" Padding="12,10" Margin="0,12,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Rooms sélectionnées"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontSize="11"/>
+                        <TextBlock x:Name="txt_room_count" Text="0"
+                                   Foreground="{StaticResource AccentGreenBrush}"
+                                   FontSize="28" FontWeight="Bold" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Étapes -->
+                <StackPanel Margin="0,4,0,0">
+                    <Border x:Name="step1_indicator" Style="{StaticResource StepActive}">
+                        <StackPanel>
+                            <TextBlock FontSize="10" Foreground="{StaticResource TextSecondaryBrush}">ÉTAPE 1</TextBlock>
+                            <TextBlock FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold">Sélection Rooms</TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="step2_indicator" Style="{StaticResource StepInactive}">
+                        <StackPanel>
+                            <TextBlock FontSize="10" Foreground="{StaticResource TextSecondaryBrush}">ÉTAPE 2</TextBlock>
+                            <TextBlock FontSize="13" Foreground="{StaticResource TextSecondaryBrush}">Choix des vues</TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="step3_indicator" Style="{StaticResource StepInactive}">
+                        <StackPanel>
+                            <TextBlock FontSize="10" Foreground="{StaticResource TextSecondaryBrush}">ÉTAPE 3</TextBlock>
+                            <TextBlock FontSize="13" Foreground="{StaticResource TextSecondaryBrush}">Feuilles &amp; Légendes</TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="step4_indicator" Style="{StaticResource StepInactive}">
+                        <StackPanel>
+                            <TextBlock FontSize="10" Foreground="{StaticResource TextSecondaryBrush}">ÉTAPE 4</TextBlock>
+                            <TextBlock FontSize="13" Foreground="{StaticResource TextSecondaryBrush}">Résumé &amp; Création</TextBlock>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- ========================================= -->
+        <!-- CONTENU PRINCIPAL                         -->
+        <!-- ========================================= -->
+        <DockPanel Grid.Column="1" Margin="0">
+
+            <!-- Barre de navigation bas -->
+            <Border DockPanel.Dock="Bottom" Background="#181825"
+                    Padding="20,12" BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="0,1,0,0">
+                <DockPanel>
+                    <Button x:Name="btn_cancel" Content="Annuler"
+                            Style="{StaticResource BtnSecondary}"
+                            DockPanel.Dock="Left" Click="cancel_click"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="btn_prev" Content="&#x25C0;  Précédent"
+                                Style="{StaticResource BtnSecondary}" Margin="0,0,8,0"
+                                Visibility="Collapsed" Click="prev_click"/>
+                        <Button x:Name="btn_next" Content="Suivant  &#x25B6;"
+                                Style="{StaticResource BtnPrimary}" Click="next_click"/>
+                        <Button x:Name="btn_create" Content="&#x2728; Créer tout"
+                                Style="{StaticResource BtnAction}"
+                                Visibility="Collapsed" Click="create_click"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- Zone de contenu scrollable -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,20">
+                <Grid>
+                    <!-- ===== ÉTAPE 1 : SÉLECTION DES ROOMS ===== -->
+                    <StackPanel x:Name="step1_panel" Visibility="Visible">
+
+                        <TextBlock Text="Sélection des Rooms"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   FontSize="22" FontWeight="Bold" Margin="0,0,0,4"/>
+                        <TextBlock Text="Choisissez les pièces pour lesquelles créer les plans."
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontSize="13" Margin="0,0,0,20"/>
+
+                        <!-- Mode de sélection -->
+                        <Border Background="{StaticResource BgCardBrush}" CornerRadius="10"
+                                Padding="20,16" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="Mode de sélection" Style="{StaticResource SectionLabel}"/>
+                                <WrapPanel Margin="0,4,0,0">
+                                    <RadioButton x:Name="rb_select_plan" Content="  Sélection sur le plan"
+                                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                                 FontSize="13" IsChecked="True" Margin="0,0,24,0"
+                                                 GroupName="SelectMode" Checked="selection_mode_changed"/>
+                                    <RadioButton x:Name="rb_select_list" Content="  Liste par niveau"
+                                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                                 FontSize="13" GroupName="SelectMode"
+                                                 Checked="selection_mode_changed"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Panel Mode A : Sélection sur plan -->
+                        <Border x:Name="panel_select_plan" Background="{StaticResource BgCardBrush}"
+                                CornerRadius="10" Padding="20,16" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Sélection interactive" Style="{StaticResource SectionLabel}"/>
+                                <TextBlock Text="Cliquez sur le bouton ci-dessous, puis sélectionnez les rooms directement dans votre vue Revit."
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="12" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                                <Button x:Name="btn_pick_rooms" Content="&#x1F5B1; Sélectionner les Rooms sur le plan"
+                                        Style="{StaticResource BtnPrimary}" HorizontalAlignment="Left"
+                                        Click="pick_rooms_click"/>
+                                <TextBlock x:Name="txt_picked_info" Text=""
+                                           Foreground="{StaticResource AccentGreenBrush}"
+                                           FontSize="12" Margin="0,10,0,0"/>
+
+                                <!-- Liste des rooms sélectionnées sur plan -->
+                                <Border Background="{StaticResource BgInputBrush}" CornerRadius="6"
+                                        Margin="0,10,0,0" MaxHeight="250">
+                                    <ListBox x:Name="list_picked_rooms"
+                                             Background="Transparent"
+                                             Foreground="{StaticResource TextPrimaryBrush}"
+                                             BorderThickness="0" FontSize="12"
+                                             ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Panel Mode B : Liste par niveau -->
+                        <Border x:Name="panel_select_list" Background="{StaticResource BgCardBrush}"
+                                CornerRadius="10" Padding="20,16" Margin="0,0,0,12"
+                                Visibility="Collapsed">
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,10">
+                                    <TextBlock Text="Rooms par niveau" Style="{StaticResource SectionLabel}"
+                                               DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <Button x:Name="btn_check_all" Content="Tout cocher"
+                                                Style="{StaticResource BtnSecondary}" Margin="0,0,6,0"
+                                                FontSize="11" Padding="10,5" Click="check_all_click"/>
+                                        <Button x:Name="btn_uncheck_all" Content="Tout décocher"
+                                                Style="{StaticResource BtnSecondary}"
+                                                FontSize="11" Padding="10,5" Click="uncheck_all_click"/>
+                                    </StackPanel>
+                                </DockPanel>
+
+                                <!-- Filtre rapide -->
+                                <Border Background="{StaticResource BgInputBrush}" CornerRadius="6"
+                                        Padding="10,6" Margin="0,0,0,10">
+                                    <DockPanel>
+                                        <TextBlock Text="&#x1F50D;" DockPanel.Dock="Left"
+                                                   VerticalAlignment="Center" Margin="0,0,8,0"
+                                                   FontSize="14"/>
+                                        <TextBox x:Name="txt_search_rooms"
+                                                 Background="Transparent"
+                                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                                 BorderThickness="0" FontSize="13"
+                                                 VerticalAlignment="Center"
+                                                 TextChanged="search_rooms_changed">
+                                        </TextBox>
+                                    </DockPanel>
+                                </Border>
+
+                                <!-- TreeView des rooms par niveau -->
+                                <Border Background="{StaticResource BgInputBrush}" CornerRadius="6"
+                                        MaxHeight="350" Padding="4">
+                                    <TreeView x:Name="tree_rooms"
+                                              Background="Transparent"
+                                              BorderThickness="0"
+                                              Foreground="{StaticResource TextPrimaryBrush}"
+                                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                    </TreeView>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+
+                    <!-- ===== ÉTAPE 2 : CHOIX DES VUES ===== -->
+                    <StackPanel x:Name="step2_panel" Visibility="Collapsed">
+
+                        <TextBlock Text="Configuration des Vues"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   FontSize="22" FontWeight="Bold" Margin="0,0,0,4"/>
+                        <TextBlock Text="Sélectionnez les types de vues à créer et leur gabarit."
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontSize="13" Margin="0,0,0,20"/>
+
+                        <!-- Vue en plan -->
+                        <Border Background="{StaticResource BgCardBrush}" CornerRadius="10"
+                                Padding="20,16" Margin="0,0,0,12">
+                            <StackPanel>
+                                <DockPanel>
+                                    <CheckBox x:Name="chk_floor_plan" Content="  Vue en plan (Floor Plan)"
+                                              Style="{StaticResource ModernCheckBox}"
+                                              IsChecked="True" FontSize="14" FontWeight="SemiBold"/>
+                                </DockPanel>
+                                <StackPanel Margin="24,10,0,0">
+                                    <TextBlock Text="Gabarit de vue :" Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontSize="12" Margin="0,0,0,4"/>
+                                    <ComboBox x:Name="cmb_floor_template" Style="{StaticResource ModernCombo}"
+                                              Width="350" HorizontalAlignment="Left"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                        <TextBlock Text="Offset (mm) :" Foreground="{StaticResource TextSecondaryBrush}"
+                                                   FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBox x:Name="txt_floor_offset" Text="300"
+                                                 Background="{StaticResource BgInputBrush}"
+                                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                                 BorderBrush="{StaticResource BorderBrush}"
+                                                 Width="80" Padding="6,4" FontSize="13"/>
+                                        <TextBlock Text="  Échelle 1:" Foreground="{StaticResource TextSecondaryBrush}"
+                                                   FontSize="12" VerticalAlignment="Center" Margin="16,0,8,0"/>
+                                        <TextBox x:Name="txt_floor_scale" Text="100"
+                                                 Background="{StaticResource BgInputBrush}"
+                                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                                 BorderBrush="{StaticResource BorderBrush}"
+                                                 Width="60" Padding="6,4" FontSize="13"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Élévations -->
+                        <Border Background="{StaticResource BgCardBrush}" CornerRadius="10"
+                                Padding="20,16" Margin="0,0,0,12">
+                            <StackPanel>
+                                <DockPanel>
+                                    <CheckBox x:Name="chk_elevations" Content="  Élévations intérieures"
+                                              Style="{StaticResource ModernCheckBox}"
+                                              IsChecked="True" FontSize="14" FontWeight="SemiBold"/>
+                                </DockPanel>
+                                <StackPanel Margin="24,10,0,0">
+                                    <TextBlock Text="Gabarit de vue :" Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontSize="12" Margin="0,0,0,4"/>
+                                    <ComboBox x:Name="cmb_elev_template" Style="{StaticResource ModernCombo}"
+                                              Width="350" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="Directions :" Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontSize="12" Margin="0,10,0,4"/>
+                                    <WrapPanel>
+                                        <CheckBox x:Name="chk_elev_north" Content="  Nord"
+                                                  Style="{StaticResource ModernCheckBox}" IsChecked="True" Margin="0,0,16,0"/>
+                                        <CheckBox x:Name="chk_elev_south" Content="  Sud"
+                                                  Style="{StaticResource ModernCheckBox}" IsChecked="True" Margin="0,0,16,0"/>
+                                        <CheckBox x:Name="chk_elev_east" Content="  Est"
+                                                  Style="{StaticResource ModernCheckBox}" IsChecked="True" Margin="0,0,16,0"/>
+                                        <CheckBox x:Name="chk_elev_west" Content="  Ouest"
+                                                  Style="{StaticResource ModernCheckBox}" IsChecked="True" Margin="0,0,16,0"/>
+                                    </WrapPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                        <TextBlock Text="Offset (mm) :" Foreground="{StaticResource TextSecondaryBrush}"
+                                                   FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBox x:Name="txt_elev_offset" Text="300"
+                                                 Background="{StaticResource BgInputBrush}"
+                                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                                 BorderBrush="{StaticResource BorderBrush}"
+                                                 Width="80" Padding="6,4" FontSize="13"/>
+                                        <TextBlock Text="  Échelle 1:" Foreground="{StaticResource TextSecondaryBrush}"
+                                                   FontSize="12" VerticalAlignment="Center" Margin="16,0,8,0"/>
+                                        <TextBox x:Name="txt_elev_scale" Text="50"
+                                                 Background="{StaticResource BgInputBrush}"
+                                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                                 BorderBrush="{StaticResource BorderBrush}"
+                                                 Width="60" Padding="6,4" FontSize="13"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Plan de plafond -->
+                        <Border Background="{StaticResource BgCardBrush}" CornerRadius="10"
+                                Padding="20,16" Margin="0,0,0,12">
+                            <StackPanel>
+                                <DockPanel>
+                                    <CheckBox x:Name="chk_ceiling_plan" Content="  Plan de plafond (Ceiling Plan)"
+                                              Style="{StaticResource ModernCheckBox}"
+                                              IsChecked="True" FontSize="14" FontWeight="SemiBold"/>
+                                </DockPanel>
+                                <StackPanel Margin="24,10,0,0">
+                                    <TextBlock Text="Gabarit de vue :" Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontSize="12" Margin="0,0,0,4"/>
+                                    <ComboBox x:Name="cmb_ceiling_template" Style="{StaticResource ModernCombo}"
+                                              Width="350" HorizontalAlignment="Left"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                        <TextBlock Text="Offset (mm) :" Foreground="{StaticResource TextSecondaryBrush}"
+                                                   FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBox x:Name="txt_ceiling_offset" Text="300"
+                                                 Background="{StaticResource BgInputBrush}"
+                                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                                 BorderBrush="{StaticResource BorderBrush}"
+                                                 Width="80" Padding="6,4" FontSize="13"/>
+                                        <TextBlock Text="  Échelle 1:" Foreground="{StaticResource TextSecondaryBrush}"
+                                                   FontSize="12" VerticalAlignment="Center" Margin="16,0,8,0"/>
+                                        <TextBox x:Name="txt_ceiling_scale" Text="100"
+                                                 Background="{StaticResource BgInputBrush}"
+                                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                                 BorderBrush="{StaticResource BorderBrush}"
+                                                 Width="60" Padding="6,4" FontSize="13"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+
+                    <!-- ===== ÉTAPE 3 : FEUILLES & LEGENDES ===== -->
+                    <StackPanel x:Name="step3_panel" Visibility="Collapsed">
+
+                        <TextBlock Text="Feuilles &amp; Légendes"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   FontSize="22" FontWeight="Bold" Margin="0,0,0,4"/>
+                        <TextBlock Text="Configurez les feuilles et les légendes à placer."
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontSize="13" Margin="0,0,0,20"/>
+
+                        <!-- Type de cartouche -->
+                        <Border Background="{StaticResource BgCardBrush}" CornerRadius="10"
+                                Padding="20,16" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Cartouche (Title Block)" Style="{StaticResource SectionLabel}"/>
+                                <ComboBox x:Name="cmb_titleblock" Style="{StaticResource ModernCombo}"
+                                          Width="400" HorizontalAlignment="Left"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Numérotation -->
+                        <Border Background="{StaticResource BgCardBrush}" CornerRadius="10"
+                                Padding="20,16" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Numérotation des feuilles" Style="{StaticResource SectionLabel}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Préfixe :" Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBox x:Name="txt_sheet_prefix" Text="RBR-"
+                                             Background="{StaticResource BgInputBrush}"
+                                             Foreground="{StaticResource TextPrimaryBrush}"
+                                             BorderBrush="{StaticResource BorderBrush}"
+                                             Width="120" Padding="6,4" FontSize="13"/>
+                                    <TextBlock Text="  Début à :" Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontSize="12" VerticalAlignment="Center" Margin="12,0,8,0"/>
+                                    <TextBox x:Name="txt_sheet_start" Text="001"
+                                             Background="{StaticResource BgInputBrush}"
+                                             Foreground="{StaticResource TextPrimaryBrush}"
+                                             BorderBrush="{StaticResource BorderBrush}"
+                                             Width="80" Padding="6,4" FontSize="13"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Légendes -->
+                        <Border Background="{StaticResource BgCardBrush}" CornerRadius="10"
+                                Padding="20,16" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Légendes à placer" Style="{StaticResource SectionLabel}"/>
+                                <TextBlock Text="Cochez les légendes à ajouter sur chaque feuille."
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="12" Margin="0,0,0,8"/>
+                                <Border Background="{StaticResource BgInputBrush}" CornerRadius="6"
+                                        MaxHeight="200" Padding="8">
+                                    <ListBox x:Name="list_legends"
+                                             Background="Transparent"
+                                             Foreground="{StaticResource TextPrimaryBrush}"
+                                             BorderThickness="0" FontSize="12"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+
+                    <!-- ===== ÉTAPE 4 : RÉSUMÉ & CRÉATION ===== -->
+                    <StackPanel x:Name="step4_panel" Visibility="Collapsed">
+
+                        <TextBlock Text="Résumé &amp; Création"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   FontSize="22" FontWeight="Bold" Margin="0,0,0,4"/>
+                        <TextBlock Text="Vérifiez les paramètres avant de lancer la création."
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontSize="13" Margin="0,0,0,20"/>
+
+                        <!-- Résumé -->
+                        <Border Background="{StaticResource BgCardBrush}" CornerRadius="10"
+                                Padding="20,16" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Récapitulatif" Style="{StaticResource SectionLabel}"/>
+                                <TextBlock x:Name="txt_summary"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           FontSize="13" TextWrapping="Wrap" LineHeight="24"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Barre de progression -->
+                        <Border x:Name="panel_progress" Background="{StaticResource BgCardBrush}"
+                                CornerRadius="10" Padding="20,16" Margin="0,0,0,12"
+                                Visibility="Collapsed">
+                            <StackPanel>
+                                <TextBlock Text="Création en cours..." Style="{StaticResource SectionLabel}"/>
+                                <ProgressBar x:Name="progress_bar" Height="20" Minimum="0" Maximum="100"
+                                             Value="0" Foreground="{StaticResource AccentGreenBrush}"
+                                             Background="{StaticResource BgInputBrush}"/>
+                                <TextBlock x:Name="txt_progress" Text=""
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="12" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+
+                </Grid>
+            </ScrollViewer>
+        </DockPanel>
+    </Grid>
+</Window>
